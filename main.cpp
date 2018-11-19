@@ -17,7 +17,6 @@ void kernelGrayScaleCPU(unsigned char *in, unsigned char *out, int size){
     }
 }
 
-
 int main(void){
 
     const char* filename = "/home/wouter/CLionProjects/HelloWorld/test.png";
@@ -54,48 +53,3 @@ int main(void){
     free(image);
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//const char* filename = argc > 1 ? argv[1] : "/home/wouter/CLionProjects/HelloWorld/test.png";
-
-/*   unsigned char *in_host, *out_host;
-
-   vector<unsigned char> image; //the raw pixels
-   unsigned width, height;
-
-   //decode
-   unsigned error = lodepng::decode(image, width, height, filename);
-
-   //if there's an error, display it
-   if(error) cout << "decoder error " << error << ": " << lodepng_error_text(error) << endl;
-
-
-
-   //the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA..., use it as texture, draw it, ...
-
-   in_host = &*image.begin();
-   out_host = &*image.begin();
-
-   //grayscale op CPU uitvoeren
-   kernelGrayScaleCPU(in_host, out_host, image.size());
-
-
-   lodepng::encode(filenameOut, out_host, width, height);*/
-
-
-/* free(in_host);
- free(out_host);*/
