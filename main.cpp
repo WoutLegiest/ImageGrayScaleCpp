@@ -43,55 +43,9 @@ void kernelSepiaScaleCPU(const unsigned char *in, unsigned char *out, int size){
     }
 }
 
-//Geen echte edge detection, wel iets anders cool
-void kernelEdgeScaleCPU(const unsigned char *in, unsigned char *out,int width,  int size){
-
-    int hor[3][3] = { { -1,-2,-1 }, { 0, 0, 0 }, { 1,2,1 } };
-
-    for(int i=0;i<size;i+=4){
-
-        for(int j=0; j<3; j++) {
-
-            int in_matrix[3][3] = {{in[i] - width - 1 + j, in[i] - width + j, in[i] - width - 1 + j},
-                                   {in[i] - 1 + j,         in[i] + j,         in[i] + 1 + j},
-                                   {in[i] + width - 1 + j, in[i] + width + j, in[i] + width - 1 + j}};
-
-            for (int c = 0; c < 3; c++) {
-                for (int d = 0; d < 3; d++) {
-                    for (int k = 0; k < 3; k++) {
-                        out[i+j] += out[i+j] + hor[c][k] * in_matrix[k][d];
-                    }
-                }
-            }
-
-        }
-
-
-        out[i+3]=in[i+3];
-    }
-}
-
-//Contrast Enhancement
-void kernelGaussianScaleCPU(const unsigned char *in, unsigned char *out, int size, int radius){
-
-    for(int i=0;i<size;i+=4){
-
-        int somRood = in[i-8] + in[i-4] + in[i] + in[i+4] + in[i+8];
-        int somGroen = in[i-7] + in[i-3] + in[i+1] + in[i+5] + in[i+9];
-        int somBlauw = in[i-6] + in[i-2] + in[i+2] + in[i+6] + in[i+10];
-
-        out[i] = static_cast<unsigned char>(somRood / (2 * radius + 1));
-        out[i+1] = static_cast<unsigned char>(somGroen / (2 * radius + 1));
-        out[i+2] = static_cast<unsigned char>(somBlauw / (2 * radius + 1));
-
-        out[i+3]=in[i+3];
-    }
-}
-
-
 int main(){
 
-    const char* filename = "/home/wouter/CLionProjects/HelloWorld/8k.png";
+    const char* filename = "/home/wouter/CLionProjects/HelloWorld/test.png";
     const char* filenameOut = "/home/wouter/CLionProjects/HelloWorld/testOut.png";
 
     unsigned width, height;
@@ -112,8 +66,17 @@ int main(){
 
     int length = width*height*4 ;
 
+    unsigned char  *red_in;
+    unsigned char  *green_in;
+    unsigned char  *blue_in;
+
+    unsigned char  *red_out;
+    unsigned char  *green_out;
+    unsigned char  *blue_out;
+
+
     clock_t begin = clock();
-    kernelGaussianScaleCPU(image, out_host,length,-10);
+    kernelSepiaScaleCPU(image, out_host,length,-10);
     clock_t end = clock();
 
     double milliseconds_cpu_kernel = (double) 1000*(end - begin)/CLOCKS_PER_SEC;
